@@ -9,7 +9,10 @@ inherit cmake features_check pkgconfig
 
 REQUIRED_DISTRO_FEATURES = "opengl"
 
-SRC_URI = "git://github.com/qualcomm/gst-plugins-imsdk;protocol=https;nobranch=1;tag=${PV}"
+SRC_URI = " \
+    git://github.com/qualcomm/gst-plugins-imsdk;protocol=https;nobranch=1;tag=${PV} \
+    file://0001-cmake-Make-camera-base-pkg-config-installation-condi.patch \
+"
 
 SRCREV = "fd9af6b8377da7039ba23423f774287977fa60bc"
 

@@ -1,0 +1,41 @@
+From c7e75527b32d740874f65ba07e48889c6ec9fc3d Mon Sep 17 00:00:00 2001
+From: Tushar Patra Jamula <tjamula@qti.qualcomm.com>
+Date: Fri, 17 Apr 2026 14:59:07 +0530
+Subject: [PATCH] cmake: Make camera base pkg-config installation conditional
+
+Only install the pkg-config file when the camera base library is
+actually built. This prevents orphaned .pc files when the library
+is excluded from the build via EXCLUDE_FROM_ALL.
+
+Change-Id: I09a495d3db3f47e0b88c08343556f91a9f83b57c
+Signed-off-by: Tushar Patra Jamula <tjamula@qti.qualcomm.com>
+
+Upstream-Status: Pending
+---
+ gst-plugin-base/gst/camera/CMakeLists.txt | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/gst-plugin-base/gst/camera/CMakeLists.txt b/gst-plugin-base/gst/camera/CMakeLists.txt
+index 12f9f131..d90d8971 100644
+--- a/gst-plugin-base/gst/camera/CMakeLists.txt
++++ b/gst-plugin-base/gst/camera/CMakeLists.txt
+@@ -62,7 +62,12 @@ configure_file(
+   @ONLY
+ )
+
+-install(
+-  FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
+-  DESTINATION ${GST_PLUGINS_QTI_OSS_INSTALL_LIBDIR}/pkgconfig
+-)
++install(CODE "
++  if(EXISTS \"$<TARGET_FILE:${TARGET_NAME}>\")
++    file(INSTALL
++      DESTINATION \"${GST_PLUGINS_QTI_OSS_INSTALL_LIBDIR}/pkgconfig\"
++      TYPE FILE
++      FILES \"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc\"
++    )
++  endif()
++")
+--
+2.43.0
+
